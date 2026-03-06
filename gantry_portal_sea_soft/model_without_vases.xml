@@ -1,0 +1,179 @@
+<mujoco model="gantry_portal_sea_soft">
+  <!-- Portal gantry with SEA joints (motor joint_i + passive spring_i) -->
+  <compiler angle="degree" coordinate="local" inertiafromgeom="false"/>
+
+  <option gravity="0 0 -9.81" timestep="0.0002"/>
+
+  <default>
+    <!-- Geoms are visual/contact only (massless). All mass/inertia comes from <inertial>. -->
+    <geom density="0"
+          contype="1" conaffinity="1"
+          friction="0.8 0.1 0.1"/>
+    <joint limited="true"
+           armature="0.01"
+           frictionloss="0.0"/>
+  </default>
+    <asset>
+    <texture type="skybox" builtin="gradient"
+             rgb1="0.4 0.5 0.8" rgb2="0.3 0.3 0.3"
+             width="512" height="512"/>
+  </asset>
+
+  <asset>
+    <texture name="tile_tex" type="2d"
+             builtin="checker"
+             rgb1="0.92 0.92 0.92" rgb2="0.86 0.86 0.86"
+             mark="edge" markrgb="0.55 0.55 0.55"
+             width="1024" height="1024"/>
+    <material name="tile_mat" texture="tile_tex"
+              texrepeat="8 8" texuniform="true"
+              specular="0.4" shininess="0.8"
+              reflectance="0.05"/>
+  </asset>
+  <asset>
+    <!-- optional: make it look nicer -->
+    <material name="table_wood" rgba="1.0 0.753 0.549 1" specular="0.2" shininess="0.3"/>
+  </asset>
+  <asset>
+    <material name="ceramic" rgba="0.85 0.85 0.88 1" specular="0.6" shininess="0.9"/>
+  </asset>
+  <contact>
+    <!-- Exclude contacts across the spring joints -->
+    <exclude body1="cursor_1"       body2="beam3"/>
+    <exclude body1="cursor_2"       body2="beam4_carriage"/>
+    <exclude body1="beam4"          body2="ee_link"/>
+  </contact>
+
+
+  <worldbody>
+    <!-- Table body anchored to world (no joints => fixed) -->
+    <geom name="ground" type="plane" size="5 5 0.1" rgba="0.95 0.95 0.95 1"  material="tile_mat"/>
+    
+
+
+
+    <!-- Fixed portal structure -->
+    <body name="chassis" pos="0 0 0.1">
+      <inertial pos="0 0 0"
+                mass="1.0"
+                diaginertia="0.01 0.01 0.01"/>
+
+      <!-- Legs (height=2 m). Base corners: (-1,-1,0), (1,-1,0), (-1,1,0), (1,1,0) -->
+      <!-- MJCF box 'size' = half-lengths -->
+      <geom name="leg1_geom" type="box" size="0.05 0.05 1.0" pos="-1 -1 1" rgba="0.2 0.2 0.2 1"/>
+      <geom name="leg2_geom" type="box" size="0.05 0.05 1.0" pos=" 1 -1 1" rgba="0.2 0.2 0.2 1"/>
+      <geom name="leg3_geom" type="box" size="0.05 0.05 1.0" pos="-1  1 1" rgba="0.2 0.2 0.2 1"/>
+      <geom name="leg4_geom" type="box" size="0.05 0.05 1.0" pos=" 1  1 1" rgba="0.2 0.2 0.2 1"/>
+
+      <!-- Top beams at z=2 (length=2 m along x) -->
+      <geom name="beam1_geom" type="box" size="1.0 0.05 0.05" pos="0 -1 2" rgba="0.2 0.2 0.2 1"/>
+      <geom name="beam2_geom" type="box" size="1.0 0.05 0.05" pos="0  1 2" rgba="0.2 0.2 0.2 1"/>
+
+      <!-- X stage on beam1: anchor at leg1 top = (-1,-1,2) -->
+        
+      	
+      	
+      <body name="cursor_1" pos="-0.45999999999999996 -1 2.1">
+        <inertial pos="0 0 0"
+                  mass="0.5"
+                  diaginertia="0.000866667 0.000866667 0.0012"/>
+        <joint name="joint_1" type="slide" axis="1 0 0" range="-0.53 1.2"/>
+        <geom name="cursor_1_geom" type="box" size="0.06 0.06 0.05" rgba="0.2 0.5 0.9 1"/>
+
+        <!-- Passive spring along x: cursor_1 -> beam3 -->
+	<body name="beam3" pos="0.12 0 0">
+          <inertial pos="0 1 0"
+                    mass="1.0"
+                    diaginertia="0.334167 0.001667 0.334167"/>
+                    
+          
+          <joint name="spring_1" type="slide" axis="1 0 0"
+                 range="-0.18 0.18"
+                 springref="0"
+                 stiffness="20000"
+                 damping="80"/>
+          
+          <!-- beam3: 2 m along +y (from y=-1 to y=+1 globally) -->
+          <geom name="beam3_geom" type="box"
+                size="0.05 1.0 0.05"
+                pos="0 1 0"
+                rgba="0.8 0.8 0.8 1"/>
+
+          <!-- Y stage on beam3 (moves along +y) -->
+          <body name="cursor_2" pos="0.12 1.0 0">
+            <inertial pos="0 0 0"
+                      mass="0.5"
+                      diaginertia="0.000866667 0.000866667 0.0012"/>
+            <joint name="joint_2" type="slide" axis="0 1 0" range="-0.85 0.85"/>
+            <geom name="cursor_2_geom" type="box" size="0.06 0.06 0.05" rgba="0.2 0.5 0.9 1"/>
+
+            <!-- Passive spring_2 (as requested: x-direction) -->
+            <body name="beam4_carriage" pos="0 0 0">
+              <inertial pos="0 0 0"
+                        mass="0.3"
+                        diaginertia="0.0002 0.0002 0.0002"/>
+              
+              <joint name="spring_2" type="slide" axis="0 1 0"
+                     range="-0.18 0.18"
+                     springref="0"
+                     stiffness="20000"
+                     damping="40"/>
+              
+              <geom name="beam4_carriage_geom" type="box" size="0.05 0.05 0.05" rgba="0.3 0.3 0.3 1"/>
+
+              <!-- Vertical actuator: prismatic joint_3 (z-direction) -->
+              <!-- Interpret 'rest: lower end aligned with beam3' as joint_3=0; extend down with negative z -->
+              <body name="beam4" pos="0.12 0 0">
+                <inertial pos="0 0 1"
+                          mass="1.0"
+                          diaginertia="0.334167 0.334167 0.001667"/>
+                <joint name="joint_3" type="slide" axis="0 0 -1" range="-0.05 2.0"/>
+
+                <!-- beam4: vertical member (length=2 m), link frame at its lower end; geom centered at z=+1 -->
+                <geom name="beam4_geom" type="box"
+                      size="0.05 0.05 1.0"
+                      pos="0 0 1"
+                      rgba="0.8 0.8 0.8 1"/>
+
+                <!-- Passive spring_3 between beam4 lower end and end-effector -->
+                <body name="ee_link" pos="0.1 0 0.05">
+                  <inertial pos="0 0 -0.05"
+                            mass="2.0"
+                            diaginertia="0.000333333 0.000333333 0.000333333"/>
+                  
+                  <joint name="spring_3" type="slide" axis="0 0 1"
+                         range="-0.18 0.18"
+                         springref="0"
+                         stiffness="20000"
+                         damping="40"/>
+                  
+                  <geom name="ee_geom" type="box"
+                        size="0.05 0.05 0.10"
+                        pos="0 0 -0.05"
+                        rgba="0.9 0.3 0.3 1"/>
+
+                  <site name="ee" pos="0.0 0 -0.15000000000000002" size="0.10" rgba="0.0 0.0 1.0 0.1"/>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="motor_1" joint="joint_1"
+           ctrllimited="true" ctrlrange="-300 300"
+           forcelimited="true" forcerange="-300 300"
+           gear="1"/>
+    <motor name="motor_2" joint="joint_2"
+           ctrllimited="true" ctrlrange="-300 300"
+           forcelimited="true" forcerange="-300 300"
+           gear="1"/>
+    <motor name="motor_3" joint="joint_3"
+           ctrllimited="true" ctrlrange="-300 300"
+           forcelimited="true" forcerange="-300 300"
+           gear="1"/>
+  </actuator>
+</mujoco>
