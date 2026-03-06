@@ -33,7 +33,9 @@ Students are expected to work mainly on the controller configuration files and u
 │   ├── README.md
 │   ├── rigid_model.xml
 │   ├── tests
-│   │   └── trajectory_20260306173155.mat
+│   │   ├── trajectory_YYYYMMDDHHMMSS.mat
+│   │   ├── trajectory_YYYYMMDDHHMMSS.mat
+│   │   └── trajectory_YYYYMMDDHHMMSS.mat
 │   ├── trajectory.gcode
 │   └── trajectory.txt
 ├── identification_experiment.py

@@ -24,6 +24,7 @@ with open(f'{model_name}/initial_control_config.yaml', 'r') as file:
     params_yaml = yaml.safe_load(file)
     controller_params = params_yaml['controller']
     dynamic_params = np.array(params_yaml['model_parameters'])
+    motion_law_params = controller_params['motion_law_parameters']
 
 # Create simulator for Gantry SEA robot (MuJoCo)
 xml_path = f"{model_name}/model_without_vases.xml"
@@ -51,9 +52,6 @@ joint_torque = robot.read_actuator_value()
 feedforward_action = np.array([0.0]*dof)
 decentralized_ctrl.starting(initial_reference, measured_output, joint_torque, feedforward_action)
 
-# Define the Motion Law
-max_Dq = np.array([5]*dof)
-max_DDq = np.array([5]*dof)
 
 working_points=[[0.0,0.0,0.0],[0.5,.5,0.5],[0.0,-0.5,1.0]]
 
@@ -80,7 +78,7 @@ for wp in working_points:
     instructions = ["pause: 1", f"move: [{wp[0]}, {wp[1]}, {wp[2]}]", "pause: 5"]
     measured_output = robot.read_sensor_value()
     q0 = measured_output[:dof]
-    ml = TrapezoidalMotionLaw(max_Dq, max_DDq, Tc)
+    ml = TrapezoidalMotionLaw(motion_law_params, Tc)
     ml.set_initial_condition(q0)
     ml.add_instructions(instructions)
 

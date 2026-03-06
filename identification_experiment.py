@@ -23,6 +23,7 @@ with open(f'{model_name}/initial_control_config.yaml', 'r') as file:
     params_yaml = yaml.safe_load(file)
     controller_params = params_yaml['controller']
     dynamic_params = np.array(params_yaml['model_parameters'])
+    motion_law_params = controller_params['motion_law_parameters']
 
 # Create simulator for Gantry SEA robot (MuJoCo)
 xml_path = f"{model_name}/model_without_vases.xml"
@@ -59,9 +60,7 @@ DDq0 = np.array([0]*dof)
 initial_reference = np.concatenate((q0, Dq0, DDq0))
 
 # Define the Motion Law
-max_Dq = np.array([5]*dof)
-max_DDq = np.array([5]*dof)
-ml = TrapezoidalMotionLaw(max_Dq, max_DDq, Tc)
+ml = TrapezoidalMotionLaw(motion_law_params, Tc) # crea legge di moto
 ml.set_initial_condition(q0)
 
 # Define a sequence of motion instructions
