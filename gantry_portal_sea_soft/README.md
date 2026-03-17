@@ -1,12 +1,10 @@
 # gantry_portal_sea_soft
 
-Generated from: gantry_portal_soft.yaml
+Generated from: group16.yaml
 
 Artifacts:
-- MuJoCo SEA MJCF: model.xml
-- URDF: model.urdf
+- MuJoCo SEA MJCF (with vases): model.xml
+- MuJoCo SEA MJCF (no vases): model_without_vases.xml
 - Parameters: params.yaml
-- MuJoCo load check: ok
+- MuJoCo load check: skipped
 
-URDF notes:
-- Portal rigid URDF: fixed portal frame + 3 prismatic joints (joint_1 x, joint_2 y, joint_3 z).
