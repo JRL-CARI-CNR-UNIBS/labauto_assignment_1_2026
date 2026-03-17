@@ -55,8 +55,8 @@
     <!-- Fixed portal structure -->
     <body name="chassis" pos="0 0 0.1">
       <inertial pos="0 0 0"
-                mass="1.0"
-                diaginertia="0.01 0.01 0.01"/>
+                mass="0.366"
+                diaginertia="0.1 0.1 0.1"/>
 
       <!-- Legs (height=2 m). Base corners: (-1,-1,0), (1,-1,0), (-1,1,0), (1,1,0) -->
       <!-- MJCF box 'size' = half-lengths -->
@@ -75,7 +75,7 @@
       	
       <body name="cursor_1" pos="-0.45999999999999996 -1 2.1">
         <inertial pos="0 0 0"
-                  mass="0.5"
+                  mass="0.4916"
                   diaginertia="0.000866667 0.000866667 0.0012"/>
         <joint name="joint_1" type="slide" axis="1 0 0" range="-0.53 1.2"/>
         <geom name="cursor_1_geom" type="box" size="0.06 0.06 0.05" rgba="0.2 0.5 0.9 1"/>
@@ -83,15 +83,15 @@
         <!-- Passive spring along x: cursor_1 -> beam3 -->
 	<body name="beam3" pos="0.12 0 0">
           <inertial pos="0 1 0"
-                    mass="1.0"
+                    mass="0.3864"
                     diaginertia="0.334167 0.001667 0.334167"/>
                     
           
           <joint name="spring_1" type="slide" axis="1 0 0"
                  range="-0.18 0.18"
                  springref="0"
-                 stiffness="20000"
-                 damping="80"/>
+                 stiffness="123605.6363"
+                 damping="74.3899"/>
           
           <!-- beam3: 2 m along +y (from y=-1 to y=+1 globally) -->
           <geom name="beam3_geom" type="box"
@@ -102,7 +102,7 @@
           <!-- Y stage on beam3 (moves along +y) -->
           <body name="cursor_2" pos="0.12 1.0 0">
             <inertial pos="0 0 0"
-                      mass="0.5"
+                      mass="0.6171"
                       diaginertia="0.000866667 0.000866667 0.0012"/>
             <joint name="joint_2" type="slide" axis="0 1 0" range="-0.85 0.85"/>
             <geom name="cursor_2_geom" type="box" size="0.06 0.06 0.05" rgba="0.2 0.5 0.9 1"/>
@@ -110,14 +110,14 @@
             <!-- Passive spring_2 (as requested: x-direction) -->
             <body name="beam4_carriage" pos="0 0 0">
               <inertial pos="0 0 0"
-                        mass="0.3"
+                        mass="0.6231"
                         diaginertia="0.0002 0.0002 0.0002"/>
               
               <joint name="spring_2" type="slide" axis="0 1 0"
                      range="-0.18 0.18"
                      springref="0"
-                     stiffness="20000"
-                     damping="40"/>
+                     stiffness="100318.0631"
+                     damping="17.6191"/>
               
               <geom name="beam4_carriage_geom" type="box" size="0.05 0.05 0.05" rgba="0.3 0.3 0.3 1"/>
 
@@ -125,7 +125,7 @@
               <!-- Interpret 'rest: lower end aligned with beam3' as joint_3=0; extend down with negative z -->
               <body name="beam4" pos="0.12 0 0">
                 <inertial pos="0 0 1"
-                          mass="1.0"
+                          mass="0.505"
                           diaginertia="0.334167 0.334167 0.001667"/>
                 <joint name="joint_3" type="slide" axis="0 0 -1" range="-0.05 2.0"/>
 
@@ -138,14 +138,14 @@
                 <!-- Passive spring_3 between beam4 lower end and end-effector -->
                 <body name="ee_link" pos="0.1 0 0.05">
                   <inertial pos="0 0 -0.05"
-                            mass="2.0"
+                            mass="0.502"
                             diaginertia="0.000333333 0.000333333 0.000333333"/>
                   
                   <joint name="spring_3" type="slide" axis="0 0 1"
                          range="-0.18 0.18"
                          springref="0"
-                         stiffness="20000"
-                         damping="40"/>
+                         stiffness="137104.6692"
+                         damping="97.3126"/>
                   
                   <geom name="ee_geom" type="box"
                         size="0.05 0.05 0.10"
