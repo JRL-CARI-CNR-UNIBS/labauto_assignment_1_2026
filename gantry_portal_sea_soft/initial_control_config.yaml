@@ -1,0 +1,74 @@
+controller:
+  motion_law_parameters:
+    max_velocity: [ 0.5, 0.5, 0.5 ]
+    max_acceleration: [ 0.1, 0.1, 0.1 ]
+  cascade_controllers:
+  - name: "joint1"
+    inner:
+      Kp: 25.0
+      Ki: 2.0
+      Kd: 0.0
+    outer:
+      Kp: 5.0
+      Ki: 0.0
+      Kd: 0.0
+  - name: "joint2"
+    inner:
+      Kp: 50.0
+      Ki: 1.0
+      Kd: 0.0
+    outer:
+      Kp: 5.0
+      Ki: 0.0
+      Kd: 0.0
+  - name: "joint3"
+    inner:
+      Kp: 30.0
+      Ki: 15.0
+      Kd: 0.0
+    outer:
+      Kp: 15.0
+      Ki: 0.0
+      Kd: 0.0
+
+model_parameters:
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+- 0.0
+
+
+
+
