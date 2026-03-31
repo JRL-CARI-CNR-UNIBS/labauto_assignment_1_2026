@@ -36,12 +36,12 @@ dof = robot.get_input_number()
 Tc = robot.get_sampling_period()
 
 # define chirp
-Duration = 30.0 # seconds
+Duration = 60.0 # seconds
 t = np.arange(0, Duration + Tc, Tc)  # Ensure inclusion of Duration if possible
 
-f0=1.0
+f0=0.1
 f1=500.0 # Tc=0.001 Fc=1000Hz, Shannon/Nyquist 500Hz
-A=50.0
+A= 40.0
 joint_number=0  # array index
 chirp_signal = A*chirp(t, f0=f0, f1=f1, t1=Duration, method='logarithmic')
 
@@ -153,8 +153,9 @@ robot.close()
 from labauto import plot_frf
 fig_frf, frf = plot_frf(
     joint_velocity[:,joint_number].flatten(), control_action[:,joint_number].flatten(), 1.0/Tc,
-    nperseg=1024,
-    max_freq=2000
+    nperseg=16384,
+    max_freq=f1+100
+    # max_freq=2000
 )
 
 fig_frf.show()
